@@ -4,138 +4,288 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Akash Jaiswar — Gameplay & Systems Programmer</title>
-<meta name="description" content="Akash Jaiswar — Gameplay &amp; Systems Programmer. Five years shipping live-service, casual and hyper-casual titles at EA, Redline Games, and Kalam Labs. C++, Unity, OpenGL, ECS architecture, rendering.">
+<meta name="description" content="Akash Jaiswar — Gameplay &amp; Systems Programmer. Six years shipping live-service, casual and hyper-casual titles at EA, Redline Games, and Kalam Labs. C++, Unity, OpenGL, ECS architecture, rendering.">
 <link rel="canonical" href="https://akasharkxx.github.io">
 <meta name="google-site-verification" content="thHk_P67PBp1Tp_5dtupedmYhgFGKjguAqjf1M-NV3E">
-
-<!-- Open Graph -->
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://akasharkxx.github.io">
 <meta property="og:title" content="Akash Jaiswar — Gameplay &amp; Systems Programmer">
-<meta property="og:description" content="Five years shipping live-service, casual and hyper-casual titles at EA, Redline Games, and Kalam Labs. C++, Unity, OpenGL, ECS architecture, rendering.">
+<meta property="og:description" content="Six years shipping live-service, casual and hyper-casual titles at EA, Redline Games, and Kalam Labs. C++, Unity, OpenGL, ECS architecture, rendering.">
 <meta property="og:site_name" content="Akash Jaiswar">
-
-<!-- Twitter / X Card -->
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Akash Jaiswar — Gameplay &amp; Systems Programmer">
 <meta name="twitter:description" content="Five years shipping live-service, casual and hyper-casual titles at EA, Redline Games, and Kalam Labs. C++, Unity, OpenGL.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-  :root{
-    --bg:#101312;--bg-grad:#0C0F0E;--surface:#161A18;--line:#262B27;
-    --line-soft:#1D2220;--text:#ECE8DF;--text-muted:#8C9289;--text-faint:#5C625B;
-    --amber:#C9874A;--amber-dim:#8A6038;--sage:#7FA08C;--sage-dim:#4E6358;
+  :root {
+    --bg:#0B0D12;--bg2:#080A0E;--surface:#10131A;--surface2:#141820;
+    --line:#1C2130;--line-soft:#141826;
+    --text:#DDE5F0;--text-muted:#6E7E99;--text-faint:#3D4D63;
+    --cyan:#00C8F0;--cyan-dim:#083A50;--cyan-glow:rgba(0,200,240,.10);
+    --orange:#FF6A35;--orange-dim:#6A2810;--orange-glow:rgba(255,106,53,.10);
+    --green:#2EBB6A;--green-dim:#0E3D24;--green-glow:rgba(46,187,106,.09);
+    --purple:#9B6DFF;--purple-dim:#2D1A66;--purple-glow:rgba(155,109,255,.08);
     --mono:'IBM Plex Mono',monospace;--display:'Space Grotesk',sans-serif;--body:'Inter',sans-serif;
   }
   *{margin:0;padding:0;box-sizing:border-box;}
   html{scroll-behavior:smooth;}
-  body{background:radial-gradient(ellipse 80% 60% at 50% 0%,var(--bg) 0%,var(--bg-grad) 100%);color:var(--text);font-family:var(--body);line-height:1.5;-webkit-font-smoothing:antialiased;}
-  a{color:var(--amber);text-decoration:none;}
-  a:hover{text-decoration:underline;}
-  :focus-visible{outline:2px solid var(--amber);outline-offset:3px;}
-  .wrap{max-width:760px;margin:0 auto;padding:0 28px;}
+  body{background:var(--bg);color:var(--text);font-family:var(--body);line-height:1.5;-webkit-font-smoothing:antialiased;}
 
-  /* HUD */
-  .hud{position:fixed;top:18px;right:18px;z-index:50;font-family:var(--mono);font-size:11px;color:var(--text-faint);background:rgba(22,26,24,.55);border:1px solid var(--line);border-radius:4px;padding:7px 10px;backdrop-filter:blur(6px);letter-spacing:.02em;line-height:1.6;pointer-events:none;user-select:none;}
-  .hud .row{display:flex;gap:8px;justify-content:space-between;}
+  /* Film grain */
+  body::after{
+    content:'';position:fixed;inset:0;pointer-events:none;z-index:9998;opacity:.35;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='280'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.88' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='280' height='280' filter='url(%23n)' opacity='.055'/%3E%3C/svg%3E");
+    background-size:280px 280px;
+  }
+
+  a{color:var(--cyan);text-decoration:none;}
+  a:hover{text-decoration:underline;}
+  :focus-visible{outline:2px solid var(--cyan);outline-offset:3px;}
+  .wrap{max-width:800px;margin:0 auto;padding:0 28px;}
+
+  /* ── HUD ── */
+  .hud{
+    position:fixed;top:16px;right:16px;z-index:9999;
+    font-family:var(--mono);font-size:10.5px;
+    background:rgba(16,19,26,.78);border:1px solid var(--line);
+    border-left:2px solid var(--cyan);border-radius:3px;
+    padding:9px 13px;backdrop-filter:blur(10px);
+    letter-spacing:.02em;line-height:1.8;
+    pointer-events:none;user-select:none;
+  }
+  .hud .row{display:flex;gap:14px;justify-content:space-between;}
   .hud .k{color:var(--text-faint);}
-  .hud .v{color:var(--sage);}
-  .hud .v.warn{color:var(--amber);}
+  .hud .v{color:var(--cyan);font-weight:500;}
+  .hud .v.warn{color:var(--orange);}
+  .hud .v.ok{color:var(--green);}
   @media(max-width:640px){.hud{display:none;}}
 
-  /* Hero */
-  .hero{position:relative;padding:96px 0 64px;background-image:linear-gradient(var(--line-soft) 1px,transparent 1px),linear-gradient(90deg,var(--line-soft) 1px,transparent 1px);background-size:36px 36px;background-position:center -1px;-webkit-mask-image:linear-gradient(to bottom,black 0%,black 90%,transparent 100%);mask-image:linear-gradient(to bottom,black 0%,black 90%,transparent 100%);}
-  .hero-inner{padding:0 28px;max-width:760px;margin:0 auto;}
-  .eyebrow{font-family:var(--mono);font-size:12.5px;letter-spacing:.14em;color:var(--sage);text-transform:uppercase;display:flex;align-items:center;gap:10px;margin-bottom:22px;}
-  .eyebrow .dot{width:6px;height:6px;border-radius:50%;background:var(--sage);box-shadow:0 0 8px var(--sage);}
-  h1{font-family:var(--display);font-weight:700;font-size:clamp(34px,6vw,52px);line-height:1.08;letter-spacing:-.01em;max-width:11ch;}
-  h1 .accent{color:var(--amber);}
-  .lede{margin-top:22px;max-width:52ch;color:var(--text-muted);font-size:16.5px;line-height:1.65;}
-  .hero-meta{margin-top:32px;display:flex;flex-wrap:wrap;gap:18px 28px;font-family:var(--mono);font-size:13px;color:var(--text-faint);}
+  /* ── Hero ── */
+  .hero{position:relative;padding:88px 0 68px;overflow:hidden;}
+  .hero-grid{
+    position:absolute;inset:0;
+    background-image:linear-gradient(var(--line-soft) 1px,transparent 1px),
+      linear-gradient(90deg,var(--line-soft) 1px,transparent 1px);
+    background-size:40px 40px;
+    mask-image:radial-gradient(ellipse 80% 100% at 25% 50%,black 20%,transparent 100%);
+    -webkit-mask-image:radial-gradient(ellipse 80% 100% at 25% 50%,black 20%,transparent 100%);
+    opacity:.55;
+  }
+  .hero-glow{
+    position:absolute;inset:0;pointer-events:none;
+    background:radial-gradient(ellipse 55% 65% at 18% 45%,rgba(0,200,240,.07) 0%,transparent 70%);
+  }
+  .hero-inner{position:relative;padding:0 28px;max-width:800px;margin:0 auto;}
+
+  .eyebrow{
+    font-family:var(--mono);font-size:11px;letter-spacing:.18em;
+    color:var(--cyan);text-transform:uppercase;
+    display:flex;align-items:center;gap:12px;margin-bottom:22px;
+  }
+  .eyebrow::before{content:'';display:block;width:28px;height:1px;background:var(--cyan);}
+
+  h1{
+    font-family:var(--display);font-weight:700;
+    font-size:clamp(36px,6.5vw,58px);
+    line-height:1.06;letter-spacing:-.02em;max-width:13ch;
+  }
+  h1 em{font-style:normal;color:var(--cyan);}
+
+  .hero-stats{
+    margin-top:28px;display:flex;flex-wrap:wrap;gap:8px;
+  }
+  .stat-chip{
+    display:flex;align-items:baseline;gap:7px;
+    background:var(--surface2);border:1px solid var(--line);
+    border-radius:3px;padding:8px 16px;
+    transition:border-color .2s;
+  }
+  .stat-chip:hover{border-color:var(--cyan-dim);}
+  .stat-chip .n{font-family:var(--display);font-size:24px;font-weight:700;color:var(--text);line-height:1;}
+  .stat-chip .l{font-family:var(--mono);font-size:10.5px;color:var(--text-faint);letter-spacing:.08em;}
+
+  .lede{
+    margin-top:26px;max-width:54ch;
+    color:var(--text-muted);font-size:15.5px;line-height:1.72;
+    border-left:2px solid var(--cyan-dim);padding-left:18px;
+  }
+
+  .hero-meta{
+    margin-top:20px;display:flex;flex-wrap:wrap;gap:12px 24px;
+    font-family:var(--mono);font-size:12px;color:var(--text-faint);
+  }
   .hero-meta span{color:var(--text-muted);}
-  .hero-actions{margin-top:28px;display:flex;gap:12px;flex-wrap:wrap;}
-  .btn{font-family:var(--mono);font-size:12.5px;letter-spacing:.02em;padding:10px 16px;border-radius:5px;text-decoration:none;display:inline-flex;align-items:center;gap:7px;cursor:pointer;border:none;transition:background .15s,border-color .15s,color .15s;}
+
+  .hero-actions{margin-top:28px;display:flex;gap:10px;flex-wrap:wrap;}
+  .btn{
+    font-family:var(--mono);font-size:12px;letter-spacing:.04em;
+    padding:9px 16px;border-radius:3px;
+    text-decoration:none;display:inline-flex;align-items:center;gap:7px;
+    cursor:pointer;border:none;
+    transition:background .15s,border-color .15s,color .15s,box-shadow .15s;
+  }
   .btn:hover{text-decoration:none;}
-  .btn-primary{background:var(--amber);color:#15110A;border:1px solid var(--amber);}
-  .btn-primary:hover{background:#D9954F;}
+  .btn-primary{background:var(--cyan);color:#050D12;border:1px solid var(--cyan);font-weight:600;}
+  .btn-primary:hover{background:#18DBFF;box-shadow:0 0 18px rgba(0,200,240,.28);}
   .btn-ghost{background:transparent;color:var(--text-muted);border:1px solid var(--line);}
-  .btn-ghost:hover{border-color:var(--sage);color:var(--text);}
+  .btn-ghost:hover{border-color:var(--cyan);color:var(--text);}
 
-  /* Sections */
-  section{padding:56px 0;}
+  /* ── Sections ── */
+  section{padding:60px 0;}
   section+section{border-top:1px solid var(--line);}
-  .sec-head{display:flex;align-items:baseline;gap:14px;margin-bottom:28px;}
-  .sec-head .tag{font-family:var(--mono);font-size:11.5px;color:var(--text-faint);letter-spacing:.1em;}
-  .sec-head h2{font-family:var(--display);font-weight:600;font-size:20px;letter-spacing:.01em;color:var(--text);}
-  .sec-head::after{content:"";flex:1;height:1px;background:var(--line);}
+  .sec-head{display:flex;align-items:center;gap:12px;margin-bottom:30px;}
+  .sec-tag{
+    font-family:var(--mono);font-size:10px;letter-spacing:.16em;
+    color:var(--cyan);background:var(--cyan-glow);
+    border:1px solid var(--cyan-dim);border-radius:2px;padding:3px 8px;
+  }
+  .sec-head h2{font-family:var(--display);font-weight:600;font-size:18px;letter-spacing:.01em;color:var(--text);}
+  .sec-head::after{content:'';flex:1;height:1px;background:var(--line);}
 
-  /* Showreel */
-  .reel-frame{position:relative;width:100%;aspect-ratio:16/9;background:var(--surface);border:1px solid var(--line);border-radius:6px;overflow:hidden;}
-  .reel-frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0;}
-  .reel-fallback{margin-top:10px;font-family:var(--mono);font-size:12px;color:var(--text-faint);}
-  .reel-fallback a{color:var(--amber);}
+  /* ── Skills ── */
+  .skill-grid{
+    display:flex;flex-direction:column;gap:1px;
+    background:var(--line);border:1px solid var(--line);border-radius:4px;overflow:hidden;
+  }
+  .skill-row{
+    background:var(--surface);padding:13px 18px;
+    display:grid;grid-template-columns:130px 1fr 110px;
+    gap:18px;align-items:center;
+    transition:background .15s;
+  }
+  .skill-row:hover{background:var(--surface2);}
+  @media(max-width:600px){.skill-row{grid-template-columns:1fr;gap:5px;}.skill-segs{display:none;}}
 
-  /* Systems */
-  .systems{display:grid;grid-template-columns:1fr;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:6px;overflow:hidden;}
-  .system-row{background:var(--surface);padding:14px 18px;display:grid;grid-template-columns:140px 1fr;gap:18px;align-items:baseline;}
-  @media(max-width:560px){.system-row{grid-template-columns:1fr;gap:6px;}}
-  .system-row .label{font-family:var(--mono);font-size:12px;letter-spacing:.08em;color:var(--amber);text-transform:uppercase;}
-  .system-row .value{font-size:14.5px;color:var(--text-muted);}
+  .skill-label{font-family:var(--mono);font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;font-weight:500;}
+  .skill-label.c{color:var(--cyan);}
+  .skill-label.o{color:var(--orange);}
+  .skill-label.g{color:var(--green);}
+  .skill-label.p{color:var(--purple);}
+  .skill-label.f{color:var(--text-faint);}
 
-  /* Build log */
-  .log-entry{padding:22px 0;}
-  .log-entry+.log-entry{border-top:1px dashed var(--line);}
-  .log-top{display:flex;justify-content:space-between;align-items:baseline;gap:16px;flex-wrap:wrap;}
-  .log-version{font-family:var(--mono);font-size:12.5px;color:var(--sage);}
-  .log-title{font-family:var(--display);font-weight:600;font-size:17px;color:var(--text);}
-  .log-range{font-family:var(--mono);font-size:12px;color:var(--text-faint);white-space:nowrap;}
-  .log-notes{margin-top:10px;color:var(--text-muted);font-size:14.5px;line-height:1.7;}
-  .log-metrics{margin-top:12px;display:flex;gap:16px;flex-wrap:wrap;font-family:var(--mono);font-size:12px;}
-  .log-metrics .m{color:var(--text-faint);}
-  .log-metrics .m b{color:var(--amber);font-weight:500;}
+  .skill-value{font-size:13.5px;color:var(--text-muted);line-height:1.5;}
 
-  /* AI badge */
-  .ai-badge{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:11px;color:var(--sage);background:rgba(127,160,140,.08);border:1px solid var(--sage-dim);border-radius:20px;padding:2px 9px;margin-top:10px;}
+  .skill-segs{display:flex;gap:3px;align-items:center;}
+  .seg{width:16px;height:12px;border-radius:2px;background:var(--line-soft);flex-shrink:0;}
+  .seg.on.c{background:var(--cyan);}
+  .seg.on.o{background:var(--orange);}
+  .seg.on.g{background:var(--green);}
+  .seg.on.p{background:var(--purple);}
+  .seg.on.f{background:var(--text-faint);}
 
-  /* Game jam entry */
-  .jam-entry{margin-top:14px;background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:14px 16px;}
+  /* ── Timeline ── */
+  .timeline{position:relative;padding-left:20px;}
+  .timeline::before{
+    content:'';position:absolute;left:4px;top:10px;bottom:10px;
+    width:1px;background:linear-gradient(to bottom,var(--cyan) 0%,var(--line) 100%);
+  }
+  .tl-entry{position:relative;padding:0 0 40px 32px;}
+  .tl-entry:last-child{padding-bottom:0;}
+  .tl-dot{
+    position:absolute;left:-22px;top:5px;
+    width:10px;height:10px;border-radius:50%;
+    border:2px solid var(--line);background:var(--bg);
+  }
+  .tl-entry:first-child .tl-dot{
+    border-color:var(--cyan);
+    box-shadow:0 0 10px rgba(0,200,240,.45);
+  }
+
+  .tl-head{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;}
+  .tl-company{font-family:var(--display);font-weight:700;font-size:19px;color:var(--text);}
+  .tl-company small{font-size:13px;color:var(--text-faint);font-weight:400;margin-left:8px;}
+  .tl-meta{text-align:right;flex-shrink:0;}
+  .tl-role{font-family:var(--mono);font-size:12px;color:var(--cyan);display:block;}
+  .tl-dates{font-family:var(--mono);font-size:11px;color:var(--text-faint);display:block;margin-top:3px;}
+
+  .tl-tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:12px;}
+  .tl-tag{font-family:var(--mono);font-size:10.5px;letter-spacing:.05em;border-radius:2px;padding:2px 8px;text-transform:uppercase;}
+  .tl-tag.c{color:var(--cyan);background:var(--cyan-glow);border:1px solid var(--cyan-dim);}
+  .tl-tag.o{color:var(--orange);background:var(--orange-glow);border:1px solid var(--orange-dim);}
+  .tl-tag.g{color:var(--green);background:var(--green-glow);border:1px solid var(--green-dim);}
+  .tl-tag.p{color:var(--purple);background:var(--purple-glow);border:1px solid var(--purple-dim);}
+  .tl-tag.f{color:var(--text-faint);background:transparent;border:1px solid var(--line);}
+
+  .tl-notes{margin-top:14px;color:var(--text-muted);font-size:14px;line-height:1.78;}
+
+  .tl-metrics{margin-top:18px;display:flex;flex-wrap:wrap;gap:10px;}
+  .metric-block{
+    background:var(--surface2);border:1px solid var(--line);
+    border-radius:3px;padding:12px 18px;min-width:80px;
+  }
+  .metric-block .mn{
+    font-family:var(--display);font-weight:700;font-size:26px;
+    color:var(--green);line-height:1;display:block;
+  }
+  .metric-block .ml{
+    font-family:var(--mono);font-size:10px;color:var(--text-faint);
+    letter-spacing:.08em;text-transform:uppercase;display:block;margin-top:5px;
+  }
+
+  /* Jam box */
+  .jam-box{
+    margin-top:18px;background:var(--surface2);
+    border:1px solid var(--line);border-left:3px solid var(--orange);
+    border-radius:3px;padding:14px 18px;
+  }
   .jam-head{display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:8px;margin-bottom:8px;}
-  .jam-title{font-family:var(--display);font-weight:600;font-size:15px;color:var(--text);}
-  .jam-badge{font-family:var(--mono);font-size:11px;color:var(--amber);background:rgba(201,135,74,.08);border:1px solid var(--amber-dim);border-radius:20px;padding:2px 9px;}
-  .jam-desc{font-size:13.5px;color:var(--text-muted);line-height:1.6;}
+  .jam-title{font-family:var(--display);font-weight:600;font-size:14.5px;color:var(--text);}
+  .jam-badge{font-family:var(--mono);font-size:11px;color:var(--orange);background:var(--orange-glow);border:1px solid var(--orange-dim);border-radius:2px;padding:2px 8px;}
+  .jam-desc{font-size:13px;color:var(--text-muted);line-height:1.65;}
+  .ai-badge{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:10.5px;color:var(--purple);background:var(--purple-glow);border:1px solid var(--purple-dim);border-radius:20px;padding:2px 9px;margin-top:10px;}
 
-  /* In development */
-  .build-item{margin-bottom:22px;}
+  /* ── In development ── */
+  .build-item{margin-bottom:28px;}
   .build-item:last-child{margin-bottom:0;}
-  .build-head{display:flex;justify-content:space-between;gap:12px;margin-bottom:8px;font-size:14.5px;}
-  .build-head .name{color:var(--text);font-weight:500;}
-  .build-head .pct{font-family:var(--mono);font-size:12px;color:var(--text-faint);}
-  .build-desc{font-size:13.5px;color:var(--text-muted);margin-bottom:9px;line-height:1.6;}
-  .bar{height:5px;background:var(--line-soft);border-radius:3px;overflow:hidden;}
-  .bar-fill{height:100%;background:linear-gradient(90deg,var(--sage-dim),var(--sage));border-radius:3px;}
+  .build-head{display:flex;justify-content:space-between;gap:12px;margin-bottom:8px;}
+  .build-head .name{color:var(--text);font-weight:500;font-size:15px;}
+  .build-head .pct{font-family:var(--mono);font-size:12px;color:var(--cyan);}
+  .build-desc{font-size:13.5px;color:var(--text-muted);margin-bottom:11px;line-height:1.65;}
+  .seg-bar{display:flex;gap:3px;height:7px;}
+  .seg-bar .s{flex:1;border-radius:2px;background:var(--line-soft);}
+  .seg-bar .s.on{background:var(--cyan);}
+  .seg-bar .s.half{background:var(--cyan-dim);filter:brightness(1.8);opacity:.55;}
 
-  /* Contact */
+  /* ── Contact ── */
   .contact-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:18px;}
   @media(max-width:560px){.contact-grid{grid-template-columns:1fr;}}
-  .contact-card{background:var(--surface);border:1px solid var(--line);border-radius:5px;padding:9px 12px;display:flex;align-items:center;gap:9px;text-decoration:none;transition:border-color .15s ease;cursor:pointer;}
-  .contact-card:hover{border-color:var(--sage);text-decoration:none;}
-  .contact-card .cc-icon{width:14px;height:14px;color:var(--amber);flex-shrink:0;}
+  .contact-card{
+    background:var(--surface);border:1px solid var(--line);border-radius:3px;
+    padding:10px 14px;display:flex;align-items:center;gap:10px;
+    text-decoration:none;cursor:pointer;
+    transition:border-color .15s,background .15s;
+  }
+  .contact-card:hover{border-color:var(--cyan);background:var(--surface2);text-decoration:none;}
+  .contact-card .cc-icon{width:14px;height:14px;color:var(--cyan);flex-shrink:0;}
   .contact-card .cc-value{font-family:var(--mono);font-size:12.5px;color:var(--text-muted);}
-  .contact-card.copied{border-color:var(--sage);}
-  .contact-card.copied .cc-value{color:var(--sage);}
+  .contact-card.copied{border-color:var(--green);}
+  .contact-card.copied .cc-value{color:var(--green);}
 
   /* Terminal */
-  .connect-term{font-family:var(--mono);font-size:14px;background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:22px 24px;line-height:2;}
-  .connect-term .prompt{color:var(--text-faint);}
+  .connect-term{
+    font-family:var(--mono);font-size:13.5px;
+    background:var(--surface);border:1px solid var(--line);
+    border-top:2px solid var(--cyan);
+    border-radius:3px;padding:22px 26px;line-height:2.1;
+  }
+  .connect-term .prompt{color:var(--cyan);}
   .connect-term .cmd{color:var(--text);}
-  .connect-term a{color:var(--amber);}
-  .connect-term .ok{color:var(--sage);}
-  .cursor{display:inline-block;width:7px;height:14px;background:var(--amber);margin-left:6px;vertical-align:-2px;animation:blink 1.1s steps(1) infinite;}
+  .connect-term a{color:var(--cyan);}
+  .connect-term .ok{color:var(--green);}
+  .cursor{
+    display:inline-block;width:7px;height:13px;
+    background:var(--cyan);margin-left:6px;vertical-align:-2px;
+    animation:blink 1.1s steps(1) infinite;
+  }
   @media(prefers-reduced-motion:reduce){.cursor{animation:none;opacity:.6;}}
   @keyframes blink{50%{opacity:0;}}
 
-  footer{padding:36px 0 56px;font-family:var(--mono);font-size:11.5px;color:var(--text-faint);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+  footer{
+    padding:32px 0 52px;font-family:var(--mono);font-size:11px;color:var(--text-faint);
+    display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;
+    border-top:1px solid var(--line);
+  }
 </style>
 <script type="application/ld+json">
 {
@@ -143,18 +293,15 @@
   "@type": "Person",
   "name": "Akash Jaiswar",
   "jobTitle": "Gameplay & Systems Programmer",
-  "description": "Gameplay and Systems Programmer with five years shipping live-service, casual and hyper-casual titles at EA, Redline Games, and Kalam Labs. Specialising in C++, Unity, OpenGL, ECS architecture, and rendering.",
+  "description": "Gameplay and Systems Programmer with six years shipping live-service, casual and hyper-casual titles at EA, Redline Games, and Kalam Labs. Specialising in C++, Unity, OpenGL, ECS architecture, and rendering.",
   "url": "https://akasharkxx.github.io",
   "email": "akash.jaiswar41@gmail.com",
   "sameAs": [
-    "https://www.linkedin.com/in/r1phunt3r",
+    "https://www.linkedin.com/in/akashgamedev/",
     "https://github.com/akasharkxx"
   ],
   "knowsAbout": ["C++", "Unity", "OpenGL", "Game Development", "ECS Architecture", "Rendering", "Game Programming", "SDL2", "GLSL"],
-  "worksFor": {
-    "@type": "Organization",
-    "name": "Electronic Arts"
-  },
+  "worksFor": {"@type": "Organization", "name": "Electronic Arts"},
   "alumniOf": [
     {"@type": "Organization", "name": "Redline Games"},
     {"@type": "Organization", "name": "Kalam Labs"}
@@ -167,22 +314,36 @@
 <div class="hud" id="hud" aria-hidden="true">
   <div class="row"><span class="k">FPS</span><span class="v" id="hud-fps">60</span></div>
   <div class="row"><span class="k">FRAME</span><span class="v" id="hud-ms">16.6ms</span></div>
-  <div class="row"><span class="k">STATUS</span><span class="v warn">OPEN_TO_RELOCATE</span></div>
+  <div class="row"><span class="k">MEM</span><span class="v">38.4 MB</span></div>
+  <div class="row"><span class="k">CALLS</span><span class="v">312</span></div>
+  <div class="row"><span class="k">STATUS</span><span class="v warn">OPEN_TO_HIRE</span></div>
 </div>
 
 <header class="hero">
+  <div class="hero-grid" aria-hidden="true"></div>
+  <div class="hero-glow" aria-hidden="true"></div>
   <div class="hero-inner">
-    <div class="eyebrow"><span class="dot"></span>GAMEPLAY &amp; SYSTEMS PROGRAMMER</div>
-    <h1>Building the systems<br>underneath the <span class="accent">game.</span></h1>
-    <p class="lede">Five years shipping live-service, casual and hyper-casual titles — EA, Redline Games, Kalam Labs. Lately I've been going further under the hood: engines, rendering, and the architecture players never see but always feel.</p>
+    <div class="eyebrow">Gameplay &amp; Systems Programmer</div>
+    <h1>Building systems<br>players <em>feel,</em><br>never see.</h1>
+
+    <div class="hero-stats">
+      <div class="stat-chip"><span class="n">6</span><span class="l">YRS EXP</span></div>
+      <div class="stat-chip"><span class="n">3</span><span class="l">STUDIOS</span></div>
+      <div class="stat-chip"><span class="n">300M+</span><span class="l">DOWNLOADS</span></div>
+      <div class="stat-chip"><span class="n">9</span><span class="l">TITLES SHIPPED</span></div>
+    </div>
+
+    <p class="lede">EA, Redline Games, Kalam Labs. Gameplay to rendering to engine architecture — I work across the full stack of what makes a game run and feel right.</p>
+
     <div class="hero-meta">
       <div><span>Based</span> — India</div>
       <div><span>Targeting</span> — EU / Finland / Remote</div>
       <div><span>Stack</span> — C++ · Unity · OpenGL</div>
     </div>
+
     <div class="hero-actions">
       <a class="btn btn-primary" href="https://raw.githubusercontent.com/akasharkxx/akasharkxx.github.io/main/Akash_Jaiswar_CV_EU.pdf" download="Akash_Jaiswar_CV.pdf" target="_blank" rel="noopener">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 3v13M5 16l7 7 7-7"/><path d="M3 21h18"/></svg>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 3v13M5 16l7 7 7-7"/><path d="M3 21h18"/></svg>
         Download CV
       </a>
       <a class="btn btn-ghost" href="#connect">Get in touch</a>
@@ -193,98 +354,199 @@
 <main class="wrap">
 
   <section id="showreel">
-    <div class="sec-head"><span class="tag">00</span><h2>Showreel</h2></div>
-    <div class="reel-frame">
-      <iframe src="https://drive.google.com/file/d/1BVfkVwGZ0zmImB2HZUhHE6UNArdTsHuN/preview" allow="autoplay" loading="lazy" title="Akash Jaiswar — Showreel"></iframe>
+    <div class="sec-head"><span class="sec-tag">00</span><h2>Showreel</h2></div>
+    <div style="position:relative;width:100%;aspect-ratio:16/9;background:var(--surface);border:1px solid var(--line);border-radius:4px;overflow:hidden;">
+      <iframe src="https://drive.google.com/file/d/1BVfkVwGZ0zmImB2HZUhHE6UNArdTsHuN/preview"
+        allow="autoplay; fullscreen" loading="lazy"
+        title="Akash Jaiswar — Showreel"
+        style="position:absolute;inset:0;width:100%;height:100%;border:0;"></iframe>
     </div>
-    <div class="reel-fallback">Video not loading? <a href="https://drive.google.com/file/d/1BVfkVwGZ0zmImB2HZUhHE6UNArdTsHuN/view" target="_blank" rel="noopener">Open in Drive →</a></div>
+    <div style="margin-top:9px;font-family:var(--mono);font-size:12px;color:var(--text-faint);">
+      Video not loading? <a href="https://drive.google.com/file/d/1BVfkVwGZ0zmImB2HZUhHE6UNArdTsHuN/view" target="_blank" rel="noopener">Open in Drive →</a>
+    </div>
   </section>
 
   <section id="systems">
-    <div class="sec-head"><span class="tag">01</span><h2>Systems</h2></div>
-    <div class="systems">
-      <div class="system-row"><div class="label">Rendering</div><div class="value">OpenGL, GLSL, Unity render pipelines, rendering fundamentals</div></div>
-      <div class="system-row"><div class="label">Gameplay</div><div class="value">Player controllers, camera systems, multiplayer, UI systems</div></div>
-      <div class="system-row"><div class="label">Engine</div><div class="value">ECS architecture, memory management, game loop design, SDL2</div></div>
-      <div class="system-row"><div class="label">Live-ops</div><div class="value">Internal tooling, content pipelines, retention &amp; performance systems</div></div>
-      <div class="system-row"><div class="label">AI Tools</div><div class="value">GitHub Copilot &amp; Claude — daily use for code generation, review, and iteration speed</div></div>
-      <div class="system-row"><div class="label">Tooling</div><div class="value">Git, Perforce, Jenkins CI/CD, profiling &amp; optimisation</div></div>
+    <div class="sec-head"><span class="sec-tag">01</span><h2>Systems</h2></div>
+    <div class="skill-grid">
+      <div class="skill-row">
+        <div class="skill-label c">Rendering</div>
+        <div class="skill-value">OpenGL, GLSL, Unity render pipelines, rendering fundamentals</div>
+        <div class="skill-segs">
+          <div class="seg on c"></div><div class="seg on c"></div><div class="seg on c"></div><div class="seg on c"></div><div class="seg"></div>
+        </div>
+      </div>
+      <div class="skill-row">
+        <div class="skill-label o">Gameplay</div>
+        <div class="skill-value">Player controllers, camera systems, multiplayer, UI systems</div>
+        <div class="skill-segs">
+          <div class="seg on o"></div><div class="seg on o"></div><div class="seg on o"></div><div class="seg on o"></div><div class="seg on o"></div>
+        </div>
+      </div>
+      <div class="skill-row">
+        <div class="skill-label c">Engine</div>
+        <div class="skill-value">ECS architecture, memory management, game loop design, SDL2</div>
+        <div class="skill-segs">
+          <div class="seg on c"></div><div class="seg on c"></div><div class="seg on c"></div><div class="seg"></div><div class="seg"></div>
+        </div>
+      </div>
+      <div class="skill-row">
+        <div class="skill-label g">Live-ops</div>
+        <div class="skill-value">Internal tooling, content pipelines, retention &amp; performance systems</div>
+        <div class="skill-segs">
+          <div class="seg on g"></div><div class="seg on g"></div><div class="seg on g"></div><div class="seg on g"></div><div class="seg"></div>
+        </div>
+      </div>
+      <div class="skill-row">
+        <div class="skill-label p">AI Tools</div>
+        <div class="skill-value">GitHub Copilot &amp; Claude — code gen, review, and iteration speed</div>
+        <div class="skill-segs">
+          <div class="seg on p"></div><div class="seg on p"></div><div class="seg on p"></div><div class="seg on p"></div><div class="seg on p"></div>
+        </div>
+      </div>
+      <div class="skill-row">
+        <div class="skill-label f">Tooling</div>
+        <div class="skill-value">Git, Perforce, Jenkins CI/CD, profiling &amp; optimisation</div>
+        <div class="skill-segs">
+          <div class="seg on f"></div><div class="seg on f"></div><div class="seg on f"></div><div class="seg on f"></div><div class="seg"></div>
+        </div>
+      </div>
     </div>
   </section>
 
   <section id="log">
-    <div class="sec-head"><span class="tag">02</span><h2>Build log</h2></div>
+    <div class="sec-head"><span class="sec-tag">02</span><h2>Experience</h2></div>
+    <div class="timeline">
 
-    <div class="log-entry">
-      <div class="log-top">
-        <div><span class="log-version">v2024.02 — present</span> &nbsp; <span class="log-title">Electronic Arts <span style="color:var(--text-faint);font-weight:400;">(via Gameshastra)</span></span></div>
-        <div class="log-range">Software Engineer</div>
-      </div>
-      <p class="log-notes">Gameplay features and live-ops systems across PVZ Heroes, Need for Speed Mobile, Peggle Blast, and Bejeweled Stars. Internal tools for design &amp; QA. Debugged live systems across Android, iOS, and Facebook. GitHub Copilot and Claude integrated into daily workflow for faster feature delivery and code review.</p>
-      <div class="log-metrics">
-        <span class="m">DAU <b>+34%</b></span>
-        <span class="m">REVENUE <b>+20%</b></span>
-        <span class="m">BUILD TIME <b>-30%</b></span>
-      </div>
-      <div class="jam-entry">
-        <div class="jam-head">
-          <span class="jam-title">EA Internal Game Jam — 2D Roguelike Shooter</span>
-          <span class="jam-badge">🏆 Runner-Up</span>
+      <div class="tl-entry">
+        <div class="tl-dot"></div>
+        <div class="tl-head">
+          <div class="tl-company">Electronic Arts <small>(via Gameshastra)</small></div>
+          <div class="tl-meta">
+            <span class="tl-role">Software Engineer</span>
+            <span class="tl-dates">Feb 2024 — present</span>
+          </div>
         </div>
-        <p class="jam-desc">Sole engineer on the team. Designed and shipped a complete 2D roguelike shooter during the jam, built entirely with GitHub Copilot — demonstrating AI-assisted solo development under time constraints.</p>
-        <div class="ai-badge">
-          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
-          Built with GitHub Copilot
+        <div class="tl-tags">
+          <span class="tl-tag o">Gameplay</span>
+          <span class="tl-tag g">Live-ops</span>
+          <span class="tl-tag p">AI Tools</span>
+          <span class="tl-tag f">Tooling</span>
+        </div>
+        <p class="tl-notes">Gameplay features and live-ops systems across PVZ Heroes, Need for Speed Mobile, Peggle Blast, and Bejeweled Stars. Internal tools for design &amp; QA. Debugged live systems across Android, iOS, and Facebook. GitHub Copilot and Claude in daily workflow for faster feature delivery and code review.</p>
+        <div class="tl-metrics">
+          <div class="metric-block"><span class="mn">+34%</span><span class="ml">DAU</span></div>
+          <div class="metric-block"><span class="mn">+20%</span><span class="ml">Revenue</span></div>
+          <div class="metric-block"><span class="mn">−30%</span><span class="ml">Build time</span></div>
+          <div class="metric-block"><span class="mn">50M+</span><span class="ml">Downloads</span></div>
+        </div>
+        <div class="jam-box">
+          <div class="jam-head">
+            <span class="jam-title">EA Internal Game Jam — 2D Roguelike Shooter</span>
+            <span class="jam-badge">🏆 Runner-Up</span>
+          </div>
+          <p class="jam-desc">Sole engineer on the team. Designed and shipped a complete 2D roguelike shooter during the jam, built entirely with GitHub Copilot — demonstrating AI-assisted solo development under time constraints.</p>
+          <div class="ai-badge">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+            Built with GitHub Copilot
+          </div>
         </div>
       </div>
-    </div>
 
-    <div class="log-entry">
-      <div class="log-top">
-        <div><span class="log-version">v2022.07 — 2024.02</span> &nbsp; <span class="log-title">Redline Games</span></div>
-        <div class="log-range">Game Developer</div>
+      <div class="tl-entry">
+        <div class="tl-dot"></div>
+        <div class="tl-head">
+          <div class="tl-company">Redline Games</div>
+          <div class="tl-meta">
+            <span class="tl-role">Game Developer</span>
+            <span class="tl-dates">Jul 2022 — Feb 2024</span>
+          </div>
+        </div>
+        <div class="tl-tags">
+          <span class="tl-tag o">Gameplay</span>
+          <span class="tl-tag g">Live-ops</span>
+        </div>
+        <p class="tl-notes">Rebuilt core gameplay architecture for Ice Cream Inc. Prototyped and shipped 9 hyper-casual titles in 2–3 week cycles, across multiple genres and mechanics.</p>
+        <div class="tl-metrics">
+          <div class="metric-block"><span class="mn">200M+</span><span class="ml">Downloads</span></div>
+          <div class="metric-block"><span class="mn">9</span><span class="ml">Titles shipped</span></div>
+        </div>
       </div>
-      <p class="log-notes">Rebuilt core gameplay architecture for Ice Cream Inc. Prototyped and shipped 9 hyper-casual titles in 2–3 week cycles, across multiple genres and mechanics.</p>
-      <div class="log-metrics">
-        <span class="m">DOWNLOADS <b>200M+</b></span>
-        <span class="m">TITLES SHIPPED <b>9</b></span>
-      </div>
-    </div>
 
-    <div class="log-entry">
-      <div class="log-top">
-        <div><span class="log-version">v2020.10 — 2022.07</span> &nbsp; <span class="log-title">Kalam Labs</span></div>
-        <div class="log-range">Game Developer</div>
+      <div class="tl-entry">
+        <div class="tl-dot"></div>
+        <div class="tl-head">
+          <div class="tl-company">Kalam Labs</div>
+          <div class="tl-meta">
+            <span class="tl-role">Game Developer</span>
+            <span class="tl-dates">Oct 2020 — Jul 2022</span>
+          </div>
+        </div>
+        <div class="tl-tags">
+          <span class="tl-tag o">Gameplay</span>
+          <span class="tl-tag c">Rendering</span>
+          <span class="tl-tag f">Tooling</span>
+        </div>
+        <p class="tl-notes">Built a multiplayer educational game with real-time networking and live video streaming. Led development across gameplay, UI, and deployment.</p>
+        <div class="tl-metrics">
+          <div class="metric-block"><span class="mn">3K+</span><span class="ml">Daily users</span></div>
+          <div class="metric-block"><span class="mn">$1M+</span><span class="ml">Seed funding</span></div>
+        </div>
       </div>
-      <p class="log-notes">Built a multiplayer educational game with real-time networking and live video streaming. Led development across gameplay, UI, and deployment.</p>
-      <div class="log-metrics">
-        <span class="m">DAILY USERS <b>3,000+</b></span>
-        <span class="m">SEED FUNDING <b>$1M+</b></span>
+
+      <div class="tl-entry">
+        <div class="tl-dot"></div>
+        <div class="tl-head">
+          <div class="tl-company">Unity India Hackathon</div>
+          <div class="tl-meta">
+            <span class="tl-role" style="color:var(--orange);">🏆 Winner</span>
+            <span class="tl-dates">2019</span>
+          </div>
+        </div>
+        <div class="tl-tags">
+          <span class="tl-tag o">Gameplay</span>
+        </div>
+        <p class="tl-notes">Won the Unity India Hackathon 2019, competing against game developers nationwide. Pre-professional solo entry demonstrating early gameplay and systems work in Unity.</p>
       </div>
+
     </div>
   </section>
 
   <section id="wip">
-    <div class="sec-head"><span class="tag">03</span><h2>In development</h2></div>
+    <div class="sec-head"><span class="sec-tag">03</span><h2>In development</h2></div>
     <div class="build-item">
       <div class="build-head"><span class="name">Custom C++ engine</span><span class="pct">~40%</span></div>
       <p class="build-desc">SDL2 + OpenGL, built from scratch — input, rendering, scene management, ECS-style architecture, and a companion game framework.</p>
-      <div class="bar"><div class="bar-fill" style="width:40%"></div></div>
+      <div class="seg-bar">
+        <div class="s on"></div><div class="s on"></div><div class="s on"></div><div class="s on"></div>
+        <div class="s half"></div>
+        <div class="s"></div><div class="s"></div><div class="s"></div><div class="s"></div><div class="s"></div>
+      </div>
     </div>
     <div class="build-item">
       <div class="build-head"><span class="name">Project — full release build</span><span class="pct">~75%</span></div>
       <p class="build-desc">Levels, save system, and powerups complete. Polish and release pipeline remaining.</p>
-      <div class="bar"><div class="bar-fill" style="width:75%"></div></div>
+      <div class="seg-bar">
+        <div class="s on"></div><div class="s on"></div><div class="s on"></div><div class="s on"></div>
+        <div class="s on"></div><div class="s on"></div><div class="s on"></div>
+        <div class="s half"></div>
+        <div class="s"></div><div class="s"></div>
+      </div>
     </div>
     <div class="build-item">
       <div class="build-head"><span class="name">Two further prototypes</span><span class="pct">base complete</span></div>
       <p class="build-desc">Core mechanics and base builds done — paused in favour of the engine and the build above.</p>
-      <div class="bar"><div class="bar-fill" style="width:25%"></div></div>
+      <div class="seg-bar">
+        <div class="s on"></div><div class="s on"></div>
+        <div class="s half"></div>
+        <div class="s"></div><div class="s"></div><div class="s"></div><div class="s"></div>
+        <div class="s"></div><div class="s"></div><div class="s"></div>
+      </div>
     </div>
   </section>
 
   <section id="connect">
-    <div class="sec-head"><span class="tag">04</span><h2>Connect</h2></div>
+    <div class="sec-head"><span class="sec-tag">04</span><h2>Connect</h2></div>
     <div class="contact-grid">
       <a class="contact-card" href="https://wa.me/919699267449" target="_blank" rel="noopener">
         <svg class="cc-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.3-.1-1.7-.8-2-.9-.3-.1-.5-.1-.6.1-.2.3-.7.9-.9 1.1-.2.2-.3.2-.6.1-1.6-.7-2.6-1.4-3.6-3.1-.1-.2 0-.4.1-.5.2-.2.4-.5.6-.7.2-.2.2-.4.1-.6-.1-.2-.6-1.5-.8-2-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.5.1-.7.3-.2.2-.9.9-.9 2.1 0 1.3 1 2.5 1.1 2.7.1.2 1.9 3 4.7 4.1 2.3.9 2.8.7 3.3.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.2-.2-.5-.4z"/><path d="M12 2C6.5 2 2 6.5 2 12c0 1.9.5 3.6 1.4 5.1L2 22l5.1-1.3C8.5 21.5 10.2 22 12 22c5.5 0 10-4.5 10-10S17.5 2 12 2zm0 18c-1.6 0-3.1-.4-4.4-1.2l-.3-.2-3 .8.8-2.9-.2-.3C4.4 15 4 13.5 4 12c0-4.4 3.6-8 8-8s8 3.6 8 8-3.6 8-8 8z"/></svg>
@@ -294,7 +556,7 @@
         <svg class="cc-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4z"/><path d="M4 6l8 7 8-7"/></svg>
         <span class="cc-value" id="copy-email-text">Copy email</span>
       </button>
-      <a class="contact-card" href="https://linkedin.com/in/r1phunt3r" target="_blank" rel="noopener">
+      <a class="contact-card" href="https://www.linkedin.com/in/akashgamedev/" target="_blank" rel="noopener">
         <svg class="cc-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h14zM8.34 18V9.75H5.67V18h2.67zM7 8.6c.86 0 1.5-.63 1.5-1.5S7.87 5.6 7 5.6c-.86 0-1.5.63-1.5 1.5S6.14 8.6 7 8.6zM18.5 18v-4.5c0-2.4-1.3-3.6-3-3.6-1.4 0-2 .77-2.3 1.3V9.75h-2.6V18h2.6v-4.4c0-.5.07-1 .6-1.4.3-.2.7-.3 1.1-.3.8 0 1.3.5 1.3 1.7V18h2.3z"/></svg>
         <span class="cc-value">LinkedIn</span>
       </a>
@@ -304,19 +566,19 @@
       </a>
     </div>
     <div class="connect-term">
-      <div><span class="prompt">$</span> <span class="cmd">whoami</span></div>
+      <div><span class="prompt">❯ </span><span class="cmd">whoami</span></div>
       <div class="ok">&gt; Akash Jaiswar — Gameplay / Systems Programmer</div>
-      <div style="margin-top:8px;"><span class="prompt">$</span> <span class="cmd">services --list</span></div>
+      <div style="margin-top:8px;"><span class="prompt">❯ </span><span class="cmd">services --list</span></div>
       <div>&gt; full-time roles &middot; freelance &middot; 1:1 consulting (engine, gameplay, code review)</div>
-      <div style="margin-top:8px;"><span class="prompt">$</span> <span class="cmd">contact --mail</span></div>
+      <div style="margin-top:8px;"><span class="prompt">❯ </span><span class="cmd">contact --mail</span></div>
       <div>&gt; <a href="mailto:akash.jaiswar41@gmail.com?subject=Let%27s%20talk">akash.jaiswar41@gmail.com</a></div>
-      <div style="margin-top:8px;"><span class="prompt">$</span> <span class="cmd">contact --linkedin</span></div>
-      <div>&gt; <a href="https://linkedin.com/in/r1phunt3r" target="_blank" rel="noopener">linkedin.com/in/r1phunt3r</a></div>
-      <div style="margin-top:8px;"><span class="prompt">$</span> <span class="cmd">contact --github</span></div>
+      <div style="margin-top:8px;"><span class="prompt">❯ </span><span class="cmd">contact --linkedin</span></div>
+      <div>&gt; <a href="https://www.linkedin.com/in/akashgamedev/" target="_blank" rel="noopener">linkedin.com/in/akashgamedev</a></div>
+      <div style="margin-top:8px;"><span class="prompt">❯ </span><span class="cmd">contact --github</span></div>
       <div>&gt; <a href="https://github.com/akasharkxx" target="_blank" rel="noopener">github.com/akasharkxx</a></div>
-      <div style="margin-top:8px;"><span class="prompt">$</span> <span class="cmd">cv --download</span></div>
+      <div style="margin-top:8px;"><span class="prompt">❯ </span><span class="cmd">cv --download</span></div>
       <div>&gt; <a href="https://raw.githubusercontent.com/akasharkxx/akasharkxx.github.io/main/Akash_Jaiswar_CV_EU.pdf" download="Akash_Jaiswar_CV.pdf" target="_blank" rel="noopener">Akash_Jaiswar_CV_EU.pdf</a></div>
-      <div style="margin-top:8px;"><span class="prompt">$</span> <span class="cmd">status</span></div>
+      <div style="margin-top:8px;"><span class="prompt">❯ </span><span class="cmd">status</span></div>
       <div>&gt; open to relocation (EU, Finland preferred) and remote roles<span class="cursor" aria-hidden="true"></span></div>
     </div>
   </section>
